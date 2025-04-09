@@ -80,7 +80,7 @@ const HomePage = () => {
           bgClip={"text"}
           textAlign={"center"}
         >
-          Problems 🚀
+          Filters
         </Text>
         <HStack spacing={4}>
           {/* Date Selector */}
