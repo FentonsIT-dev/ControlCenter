@@ -69,7 +69,8 @@ const CreatePage = () => {
 							onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
 							isRequired
 						/>
-						<Input
+						
+						<Input							
 							placeholder="Start Date and Time"
 							type="datetime-local"
 							name="starttime"

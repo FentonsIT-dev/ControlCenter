@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Box, FormControl, FormLabel, Input } from '@chakra-ui/react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
 const DateSelector = ({ label, onDateChange }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (event) => {
+    const date = event.target.value;
     setSelectedDate(date);
     if (onDateChange) {
       onDateChange(date);
@@ -17,12 +16,11 @@ const DateSelector = ({ label, onDateChange }) => {
     <Box>
       <FormControl>
         
-        <DatePicker
-          placeholderText='Select a date'
-          selected={selectedDate}
+        <Input
+          type="date"
+          value={selectedDate}
           onChange={handleDateChange}
-          customInput={<Input />}
-          dateFormat="yyyy-MM-dd"
+          placeholder="Select a date"
         />
       </FormControl>
     </Box>
