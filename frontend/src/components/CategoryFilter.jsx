@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { Box, FormControl, FormLabel, Select } from "@chakra-ui/react";
 
-const CategoryFilter = ({ label, categories, onCategoryChange }) => {
+const CategoryFilter = forwardRef(({ label, categories, onCategoryChange }, ref) => {
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   const handleCategoryChange = (event) => {
-    const selectedCategory = event.target.value;
+    const category = event.target.value;
+    setSelectedCategory(category);
     if (onCategoryChange) {
-      onCategoryChange(selectedCategory);
+      onCategoryChange(category);
     }
   };
 
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      setSelectedCategory("");
+    },
+  }));
+
   return (
     <Box>
-      <FormControl>
-        <Select placeholder="Select a category" onChange={handleCategoryChange}>
+      <FormControl>    
+        <Select
+          placeholder="Select a category"
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+        >
           {categories.map((category) => (
             <option key={category} value={category}>
               {category}
@@ -22,6 +35,6 @@ const CategoryFilter = ({ label, categories, onCategoryChange }) => {
       </FormControl>
     </Box>
   );
-};
+});
 
 export default CategoryFilter;

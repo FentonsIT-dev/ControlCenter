@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Box, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import React, { useState, forwardRef, useImperativeHandle } from "react";
+import { Box, FormControl, FormLabel, Input } from "@chakra-ui/react";
 
-const DateSelector = ({ label, onDateChange }) => {
+const DateFilter = forwardRef(({ label, onDateChange }, ref) => {
   const [selectedDate, setSelectedDate] = useState("");
 
   const handleDateChange = (event) => {
@@ -11,6 +11,12 @@ const DateSelector = ({ label, onDateChange }) => {
       onDateChange(date);
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      setSelectedDate("");
+    },
+  }));
 
   return (
     <Box>
@@ -25,6 +31,6 @@ const DateSelector = ({ label, onDateChange }) => {
       </FormControl>
     </Box>
   );
-};
+});
 
-export default DateSelector;
+export default DateFilter;

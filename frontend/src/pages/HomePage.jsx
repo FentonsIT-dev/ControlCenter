@@ -1,18 +1,21 @@
 import { Container, SimpleGrid, VStack, Text, HStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom"; // Import useLocation
+import { useEffect, useState, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useProductStore } from "../store/product";
 import ProductCard from "../components/ProductCard";
-import DateSelector from "../components/DateFilter";
+import DateFilter from "../components/DateFilter";
 import CategoryFilter from "../components/CategoryFilter";
-import ResetFilter from "../components/ResetFilter"; // Import ResetFilter
+import ResetFilter from "../components/ResetFilter";
 
 const HomePage = () => {
   const { fetchProducts, products } = useProductStore();
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const location = useLocation(); // Get the current route
+  const location = useLocation();
+
+  const dateFilterRef = useRef(null);
+  const categoryFilterRef = useRef(null);
 
   const categories = [
     "Core Switch",
@@ -35,8 +38,8 @@ const HomePage = () => {
 
     if (selectedDate) {
       filtered = filtered.filter((product) => {
-        const productDate = new Date(product.starttime); // Assuming `product.starttime` exists
-        return productDate.toDateString() === selectedDate.toDateString();
+        const productDate = new Date(product.starttime).toISOString().split("T")[0];
+        return productDate === selectedDate;
       });
     }
 
@@ -52,8 +55,7 @@ const HomePage = () => {
   // Reset filters when the "/" route is accessed
   useEffect(() => {
     if (location.pathname === "/") {
-      setSelectedDate(null);
-      setSelectedCategory("");
+      handleResetFilters();
     }
   }, [location.pathname]);
 
@@ -66,8 +68,16 @@ const HomePage = () => {
   };
 
   const handleResetFilters = () => {
-    setSelectedDate(null);
+    setSelectedDate("");
     setSelectedCategory("");
+
+    // Reset the UI of DateFilter and CategoryFilter
+    if (dateFilterRef.current) {
+      dateFilterRef.current.reset();
+    }
+    if (categoryFilterRef.current) {
+      categoryFilterRef.current.reset();
+    }
   };
 
   return (
@@ -83,11 +93,16 @@ const HomePage = () => {
           Filters
         </Text>
         <HStack spacing={4}>
-          {/* Date Selector */}
-          <DateSelector label="Filter by Date" onDateChange={handleDateChange} />
+          {/* Date Filter */}
+          <DateFilter
+            ref={dateFilterRef}
+            label="Filter by Date"
+            onDateChange={handleDateChange}
+          />
 
           {/* Category Filter */}
           <CategoryFilter
+            ref={categoryFilterRef}
             label="Filter by Category"
             categories={categories}
             onCategoryChange={handleCategoryChange}
