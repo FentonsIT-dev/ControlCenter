@@ -135,7 +135,7 @@ const ProductCard = ({ product }) => {
               >
                 <option value="Core Switch">Core Switch</option>
                 <option value="WAN Firewalls">WAN Firewalls</option>
-                <option value="Perimeter Firewalls">Perimeter Tunnels</option>
+                <option value="Perimeter Firewalls">Perimeter Firewalls</option>
                 <option value="SAP Tunnels">SAP Tunnels</option>
                 <option value="Access Switches">Access Switches</option>
                 <option value="Access Points">Access Points</option>

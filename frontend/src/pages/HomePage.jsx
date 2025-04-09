@@ -1,16 +1,75 @@
-import { Container, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Container, SimpleGrid, VStack, Text, HStack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom"; // Import useLocation
 import { useProductStore } from "../store/product";
 import ProductCard from "../components/ProductCard";
+import DateSelector from "../components/DateFilter";
+import CategoryFilter from "../components/CategoryFilter";
+import ResetFilter from "../components/ResetFilter"; // Import ResetFilter
 
 const HomePage = () => {
   const { fetchProducts, products } = useProductStore();
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const location = useLocation(); // Get the current route
+
+  const categories = [
+    "Core Switch",
+    "WAN Firewalls",
+    "Perimeter Firewalls",
+    "SAP Tunnels",
+    "Access Switches",
+    "Access Points",
+    "Virtual Machines",
+    "Backup Servers",
+    "Citrix",
+  ];
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
-  console.log("products", products);
+
+  useEffect(() => {
+    let filtered = products;
+
+    if (selectedDate) {
+      filtered = filtered.filter((product) => {
+        const productDate = new Date(product.starttime); // Assuming `product.starttime` exists
+        return productDate.toDateString() === selectedDate.toDateString();
+      });
+    }
+
+    if (selectedCategory) {
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory
+      );
+    }
+
+    setFilteredProducts(filtered);
+  }, [selectedDate, selectedCategory, products]);
+
+  // Reset filters when the "/" route is accessed
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setSelectedDate(null);
+      setSelectedCategory("");
+    }
+  }, [location.pathname]);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const handleResetFilters = () => {
+    setSelectedDate(null);
+    setSelectedCategory("");
+  };
+
   return (
     <Container maxW="container.xl" py={12}>
       <VStack spacing={8}>
@@ -23,6 +82,20 @@ const HomePage = () => {
         >
           Problems 🚀
         </Text>
+        <HStack spacing={4}>
+          {/* Date Selector */}
+          <DateSelector label="Filter by Date" onDateChange={handleDateChange} />
+
+          {/* Category Filter */}
+          <CategoryFilter
+            label="Filter by Category"
+            categories={categories}
+            onCategoryChange={handleCategoryChange}
+          />
+
+          {/* Reset Filters Button */}
+          <ResetFilter onReset={handleResetFilters} />
+        </HStack>
 
         <SimpleGrid
           columns={{
@@ -33,13 +106,13 @@ const HomePage = () => {
           spacing={10}
           w={"full"}
         >
-          {products.slice().reverse().map((product) => (
+          {filteredProducts.slice().reverse().map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </SimpleGrid>
-        
-          {products.length === 0 && (
-            <Text
+
+        {filteredProducts.length === 0 && (
+          <Text
             fontSize="xl"
             textAlign={"center"}
             fontWeight="bold"
@@ -56,10 +129,10 @@ const HomePage = () => {
               </Text>
             </Link>
           </Text>
-          )}
-
+        )}
       </VStack>
     </Container>
   );
 };
+
 export default HomePage;
