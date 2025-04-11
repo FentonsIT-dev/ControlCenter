@@ -27,7 +27,12 @@ const HomePage = () => {
     "Access Points",
     "Virtual Machines",
     "Backup Servers",
-    "Citrix",
+		"Critical Alert",
+		"Server Room Alerts",
+		"IDRAC Alerts",
+		"Dialog",
+		"SLT",
+		"Citrix"
   ];
 
   useEffect(() => {
