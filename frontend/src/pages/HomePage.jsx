@@ -6,6 +6,7 @@ import ProductCard from "../components/ProductCard";
 import DateFilter from "../components/DateFilter";
 import CategoryFilter from "../components/CategoryFilter";
 import ResetFilter from "../components/ResetFilter";
+import DownloadExcel from "../components/DownloadExcel"; // Import DownloadExcel
 
 const HomePage = () => {
   const { fetchProducts, products } = useProductStore();
@@ -110,6 +111,9 @@ const HomePage = () => {
 
           {/* Reset Filters Button */}
           <ResetFilter onReset={handleResetFilters} />
+
+          {/* Download Excel Button */}
+          <DownloadExcel data={filteredProducts} fileName="Filtered_Problems" />
         </HStack>
 
         <SimpleGrid
