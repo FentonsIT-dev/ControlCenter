@@ -139,8 +139,8 @@ const ProductCard = ({ product }) => {
                 <option value="SAP Tunnels">SAP Tunnels</option>
                 <option value="Access Switches">Access Switches</option>
                 <option value="Access Points">Access Points</option>
-                <option value="Virtual Machines">Virtual Machines - VCenter</option>
-								<option value="Backup Servers">Backup Servers - Avamar</option>
+                <option value="Virtual Machines - VCenter">Virtual Machines - VCenter</option>
+								<option value="Backup Servers - Avamar">Backup Servers - Avamar</option>
 								<option value="Critical Alert">Critical Alert</option>
 								<option value="Server Room Alerts">Server Room Alerts</option>
 								<option value="IDRAC Alerts">IDRAC Alerts</option>
